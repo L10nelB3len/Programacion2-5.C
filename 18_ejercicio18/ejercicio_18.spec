@@ -5,7 +5,7 @@ a = Analysis(
     ['ejercicio_18.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('sound2.mp3', '.'), ('MonsterFriendBack.otf', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
