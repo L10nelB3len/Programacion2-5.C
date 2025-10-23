@@ -4,6 +4,7 @@ from tkinter import font
 import random
 import pygame
 import os
+import sys
 
 ctk.set_appearance_mode("dark") 
 ctk.set_default_color_theme("dark-blue")
@@ -13,9 +14,14 @@ ctk.set_default_color_theme("dark-blue")
 secreto = random.randint(1, 20)
 intentos = 6
 
+# Ruta segura para recursos 
+def ruta_recurso(rel_path):
+    base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+    return os.path.join(base_path, rel_path)
+
 # Música
 pygame.init()
-pygame.mixer.music.load("sound2.mp3")  #pista de audio
+pygame.mixer.music.load(ruta_recurso("recursos/sound2.mp3")) #pista de audio
 pygame.mixer.music.play(-1) #loop
 
 # Ventana principal
@@ -31,6 +37,7 @@ fondo.pack(fill="both", expand=True) #se ajusta a la ventana
 fuente_nombre = "MonsterFriendBack"
 fuente_personalizada = ctk.CTkFont(family=fuente_nombre, size=12)
 
+
 #Metodo para verificar lo ingresado por los usarios
 def verificar():
     global intentos
@@ -45,10 +52,12 @@ def verificar():
     if num == secreto:
         mensaje.configure(text=f"¡Adivinaste! El numero era: {secreto}")
         boton_intentar.configure(state="disabled")
+        ventana.unbind("<Return>")  
         frame_boton_reiniciar.place(relx=0.5, rely=0.85, anchor="center")
     elif intentos == 0:
         mensaje.configure(text=f"Se acabaron los intentos \nEl numero secreto era: {secreto}")
         boton_intentar.configure(state="disabled")
+        ventana.unbind("<Return>")  
         frame_boton_reiniciar.place(relx=0.5, rely=0.85, anchor="center")
     else:
         pista = "alto" if num > secreto else "bajo"
@@ -63,6 +72,7 @@ def reiniciar():
     entry.delete(0, tk.END)
     mensaje.configure(text="")
     boton_intentar.configure(state="normal")
+    ventana.bind("<Return>", lambda event: verificar())
     frame_boton_reiniciar.place_forget() 
 
 
